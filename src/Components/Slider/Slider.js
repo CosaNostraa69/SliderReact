@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import './Slider.css'
 import dataSlider from './dataSlider'
+import BtnSlider from './BtnSlider'
 
 export default function Slider() {
 
@@ -9,6 +10,52 @@ export default function Slider() {
     inProgress: false
 
     })
+
+    const nextSlide = () =>{
+
+        if(slideAnim.index !== dataSlider.length && !slideAnim.inProgress){
+            setSlideAnim({index: slideAnim.index + 1, inProgress: true})
+
+            setTimeout(() => {
+                    setSlideAnim({index: slideAnim.index + 1, inProgress: false})
+
+            }, 400)
+        }
+        else if(slideAnim.index === dataSlider.length && !slideAnim.inProgress){
+            setSlideAnim({index: 1, inProgress: true})
+            setTimeout(() => {
+                setSlideAnim({index: 1, inProgress: false})
+
+        }, 400)
+        }
+    }
+
+
+    const prevSlide = () =>{
+        if(slideAnim.index !== 1 && !slideAnim.inProgress){
+
+            setSlideAnim({index: slideAnim.index - 1, inProgress: true})
+
+            setTimeout(() => {
+                setSlideAnim({index: slideAnim.index - 1, inProgress: false})
+
+        }, 400)
+        }
+        else if(slideAnim.index === 1 && !slideAnim.inProgress){
+            setSlideAnim({index: 5, inProgress: true})
+
+            setTimeout(() => {
+                setSlideAnim({index: 5, inProgress: false})
+
+        }, 400)    
+    
+    }        
+    }
+
+    const moveDot = index => {
+        setSlideAnim({index: index, inProgress: true})
+    }
+
 
   return (
     <div className="container-slider">
@@ -24,6 +71,26 @@ export default function Slider() {
         )
     
       })}
+      <BtnSlider moveSlide={nextSlide} direction={"next"} />
+      <BtnSlider moveSlide={prevSlide} direction={"prev"} />
+
+      <div className="container-dots">
+            {Array.from({length: 5}).map((item, index) => {
+                    return <div className={slideAnim.index === index + 1 ? "dot active" : "dot"}
+                    onClick={() => moveDot(index + 1)}
+                    
+                    ></div>
+            })}
+        
+        {/* <div className={slideAnim.index === 1 ? "dot active" : "dot"}></div>
+        <div className={slideAnim.index === 2 ? "dot active" : "dot"}></div>
+        <div className={slideAnim.index === 3 ? "dot active" : "dot"}></div>
+        <div className={slideAnim.index === 4 ? "dot active" : "dot"}></div>
+        <div className={slideAnim.index === 5 ? "dot active" : "dot"}></div> */}
+
+      </div>
+
+        
     </div>
   )
 }
